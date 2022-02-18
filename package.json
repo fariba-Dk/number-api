@@ -1,7 +1,7 @@
 {
   "name": "week-5-kc-fetch",
   "version": "1.0.0",
-  "description": "",
+  "description": "Created with CodeSandbox",
   "main": "index.html",
   "scripts": {
     "start": "parcel index.html --open",
@@ -17,5 +17,15 @@
   "resolutions": {
     "@babel/preset-env": "7.13.8"
   },
-  "keywords": []
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fariba-Dk/number-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fariba-Dk/number-api/issues"
+  },
+  "homepage": "https://github.com/fariba-Dk/number-api#readme"
 }
