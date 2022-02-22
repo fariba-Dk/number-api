@@ -19,17 +19,21 @@ fetchData();
 async function renderData() {
   let numObj = await fetchData();
   console.log(`this is my num obj`, numObj);
+
   let value = '';
+  let html = `<ul>`;
+
+  // value = Object.values(numObj);
+  // console.log('this is  using Object.values', value);
+
   for (let key in numObj) {
     value = numObj[key];
+    
+    let htmlSegment = `<li>${value}</li>`;
+    html += htmlSegment;
     console.log(`---> this is value`, value);
   }
-  //console.log(`These are my arr...`, numArr);
-  let html = `<ul>`;
-  // iterate Through  your data
-  // Modify this function to sho‍w in your HTML ;
-  let htmlSegment = `<li>${value}</li>`;
-  html += htmlSegment;
+
   html += '</ul>';
 
   let container = document.querySelector('.container');
