@@ -1,34 +1,61 @@
 import React, { Component } from 'react';
 import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
 
+import Autocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from 'react-google-autocomplete';
+
 export class MapContainer extends Component {
-  state = {
-    showingInfoWindow: false,
-    activeMarker: {},
-    selectedPlace: {},
+  constructor(props) {
+    super(props);
+    this.state = {
+      address: '',
+      //for google map autocomplete
+
+      showingInfoWindow: false,
+      activeMarker: {},
+      selectedPlace: {},
+
+      mapCenter: {
+        lat: 37.773972, //san fran
+        lng: -122.431297,
+      },
+    };
+  }
+
+  handleChange = (address) => {
+    this.setState({ address });
   };
 
-  onMarkerClick = (props, marker, e) =>
-    this.setState({
-      selectedPlace: props,
-      activeMarker: marker,
-      showingInfoWindow: true,
-    });
-
-  onClose = (props) => {
-    if (this.state.showingInfoWindow) {
-      this.setState({
-        showingInfoWindow: false,
-        activeMarker: null,
-      });
-    }
+  handleSelect = (address) => {
+    this.setState({ address });
   };
 
   render() {
     return (
-      <Map centerAroundCurrentLocation google={this.props.google}>
-        <Marker onClick={this.onMarkerClick} name={'Current Location'} />
-      </Map>
+      <>
+        <Map
+          google={this.props.google}
+          initialCenter={{
+            lat: this.state.mapCenter.lat,
+            lng: this.state.mapCenter.lng,
+          }}
+          center={{
+            lat: this.state.mapCenter.lat,
+            lng: this.state.mapCenter.lng,
+          }}
+        >
+          <Marker
+            animation={this.google.maps.Animation.DROP}
+            draggable={this.google.map.draggable.true}
+            position={{
+              lat: this.state.mapCenter.lat,
+              lng: this.state.mapCenter.lng,
+            }}
+          ></Marker>
+        </Map>
+      </>
     );
   }
 }
@@ -36,3 +63,5 @@ export class MapContainer extends Component {
 export default GoogleApiWrapper({
   apiKey: 'AIzaSyB1fByA0ZCLSYpzyNAlcVJTwIEUNDYuaIE',
 })(MapContainer);
+
+//AIzaSyB1fByA0ZCLSYpzyNAlcVJTwIEUNDYuaIE
