@@ -1,36 +1,24 @@
-import React from 'react';
-import GoogleMap from './components/GoogleMap.js';
-import PlacesAutocomplete, {
-  geocodeByAddress,
-  getLatLng,
-} from 'react-places-autocomplete';
-import { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import PlacesAutocomplete from 'react-places-autocomplete';
+import scriptLoader from 'react-async-script-loader'; //dynamiclly adds and hides
 
-export default function App() {
+function App({ isScriptLoaded, isScriptLoadSucceed }) {
   const [address, setAddress] = React.useState('');
-  const [coordinates, setCoordinates] = React.useState({
-    lat: null,
-    lng: null,
-  });
 
-  const handleSelect = async (value) => {
-    const results = await geocodeByAddress(value);
-    const latLng = await getLatLng(results[0]);
+  const handleChange = (value) => {
     setAddress(value);
-    setCoordinates(latLng);
   };
 
-  return (
-    <>
-      <div>
-        <h1>World Weather Map</h1>
-        <GoogleMap />
-        <input id='autocomplete' type='text' placeholder='Enter a place' />
-      </div>
+  const handleSelect = (value) => {
+    setAddress(value);
+  };
+
+  if (isScriptLoaded && isScriptLoadSucceed) {
+    return (
       <div>
         <PlacesAutocomplete
           value={address}
-          onChange={setAddress}
+          onChange={handleChange}
           onSelect={handleSelect}
         >
           {({
@@ -40,18 +28,16 @@ export default function App() {
             loading,
           }) => (
             <div>
-              <p>Latitude: {coordinates.lat}</p>
-              <p>Longitude: {coordinates.lng}</p>
-
-              <input {...getInputProps({ placeholder: 'Enter a place' })} />
+              <input {...getInputProps({ placeholder: 'Search places...' })} />
+              {console.log('hi')}
 
               <div>
-                {loading ? <div>...loading</div> : null}
+                {loading && <div>...loading</div>}
 
                 {suggestions.map((suggestion) => {
-                  const style = {
-                    backgroundColor: suggestion.active ? '#fe9801' : '#fe9801',
-                  };
+                  const style = suggestion.active
+                    ? { backgroundColor: '#a83232', cursor: 'pointer' }
+                    : { backgroundColor: '#ffffff', cursor: 'pointer' };
                   return (
                     <div {...getSuggestionItemProps(suggestion, { style })}>
                       {suggestion.description}
@@ -63,6 +49,11 @@ export default function App() {
           )}
         </PlacesAutocomplete>
       </div>
-    </>
-  );
+    );
+  }
+  return <div></div>;
 }
+
+export default scriptLoader({
+  apiKey: `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAP_API}&libraries=places`,
+})(App);
